@@ -58,15 +58,15 @@ public class Recipe implements Priceable {
 
     public void recipeDifficulty(WeightedIngredient ingredient) {
         weightedIngredient.add(ingredient);
-        if (weightedIngredient.size() <= 8) {
+        if (weightedIngredient.size() <= 4) {
             recipesByDifficulty = RecipesByDifficulty.BEGINNER;
-        } else if (weightedIngredient.size() <= 10) {
+        } else if (weightedIngredient.size() <= 5) {
             recipesByDifficulty = RecipesByDifficulty.EASY;
-        } else if (weightedIngredient.size() <= 12) {
+        } else if (weightedIngredient.size() <= 6) {
             recipesByDifficulty = RecipesByDifficulty.MEDIUM;
-        } else if (weightedIngredient.size() <= 16) {
+        } else if (weightedIngredient.size() <= 8) {
             recipesByDifficulty = RecipesByDifficulty.HARD;
-        } else if (weightedIngredient.size() <= 18) {
+        } else if (weightedIngredient.size() <= 9) {
             recipesByDifficulty = RecipesByDifficulty.PRO;
         }
     }

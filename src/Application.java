@@ -15,20 +15,6 @@ public class Application {
         List<Recipe> recipeList = databaseRecipes.getRecipe();
         List<Recipe> recipeListFavorites = new ArrayList<>();
 
-        WeightedIngredient majonez = new WeightedIngredient(20, "majonez", 0.3, 89);
-        WeightedIngredient sir = new WeightedIngredient(15, "sir", 0.2, 537);
-        WeightedIngredient sunka = new WeightedIngredient(17, "sunka", 0.3, 672);
-        WeightedIngredient kackavalj = new WeightedIngredient(16, "kackavalj", 0.05, 679);
-        fridge.addIngredients(majonez, 10);
-        fridge.addIngredients(sir, 100);
-        fridge.addIngredients(sunka, 100);
-        fridge.addIngredients(kackavalj, 100);
-        ingredientsFridge.add(majonez);
-        ingredientsFridge.add(sir);
-        ingredientsFridge.add(sunka);
-        ingredientsFridge.add(kackavalj);
-
-
         boolean run = true;
 
         kitchenLabel:
@@ -40,13 +26,13 @@ public class Application {
             System.out.println("2. If you like to take out ingredients from a fridge");
             System.out.println("3. To check what food you can make with available ingredients");
             System.out.println("4. To check if you can make scaled recipes");
-            System.out.println("5. If you like to make some food from a recipe list");  // work in progress
+            System.out.println("5. If you like to make some food from a recipe list");
             System.out.println("6. To check what food you can make for your money");
             System.out.println("7. To check recipes by difficulty");
             System.out.println("8. To check recipes by your money and difficulty");
             System.out.println("9. To sort all recipes by difficulty");
             System.out.println("10. To sort all recipes by price");
-            System.out.println("11. Favourite recipes"); // work in progress
+            System.out.println("11. Favourite recipes (work in progress)"); // work in progress
             System.out.println("12. To check all ingredients in fridge");
             System.out.println("0. To exit kitchen");
             System.out.println("<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>");
@@ -62,7 +48,6 @@ public class Application {
                 case 1:
                     boolean case1 = true;
                     while (case1) {
-                        System.out.println(databaseIngredient.AllIngredients());
                         System.out.println("Please enter ingredient name: ");
                         String ingredientName = sc.next().toLowerCase();
                         System.out.println("Please enter ingredient weight: ");
@@ -81,6 +66,7 @@ public class Application {
                         }
                     }
                     continue kitchenLabel;
+
                 case 2:
                     boolean case2 = true;
                     while (case2) {
@@ -154,7 +140,6 @@ public class Application {
                             System.out.println((x++) + ". " + recipe1.getNameOfRecipe());
                         System.out.println("Enter number of a recipe you would like to make: ");
                         x = sc.nextInt();
-
                         fridge.takingIngredientsForRecipe(databaseRecipes.getRecipe().get(x).getWeightedIngredient(), fridge.getIngredients());
                         System.out.print("Do you want to make another recipe? Y/N ");
                         String str = sc.next().toUpperCase();
@@ -367,16 +352,7 @@ public class Application {
                             System.out.println("Thanks for using our app.");
                     }
                     break;
-                case 13:
-                    System.out.println(fridge.getIngredients());
-                    System.out.println();
-                case 14:
-
             }
-
-
         }
-
-
     }
 }
