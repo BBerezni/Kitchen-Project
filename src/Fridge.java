@@ -1,19 +1,16 @@
 import java.awt.*;
-import java.util.ArrayList;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
-import java.util.Scanner;
 
 public class Fridge {
 
-    private List<WeightedIngredient> ingredients;
+    private ArrayList<WeightedIngredient> ingredients;
 
     public Fridge() {
         this.ingredients = new ArrayList<>();
     }
 
-
-    public List<WeightedIngredient> getIngredients() {
+    public ArrayList<WeightedIngredient> getIngredients() {
         return ingredients;
     }
 
@@ -38,28 +35,31 @@ public class Fridge {
         }
     }
 
-    public void removeIngredients(List<WeightedIngredient> ingredients, String ingredientName) {
-        for (WeightedIngredient ingredientFridge : ingredients) {
-            if (ingredientName.equals(ingredientFridge.getNameOfIngredint())) {
-                ingredients.remove(ingredientFridge.getNameOfIngredint());
-                System.out.println("You have taken out: " + ingredientFridge.getNameOfIngredint());
-            } else {
-                System.out.println("Sorry you are all out of: " + ingredientFridge.getNameOfIngredint());
+    public void removeIngredients(String ingredientName) {
+        for (int i = 0; i < this.ingredients.size(); i++) {
+            if (this.ingredients.get(i).getNameOfIngredint().equals(ingredientName.toLowerCase())) {
+                ingredients.remove(ingredients.get(i));
+                break;
             }
         }
     }
 
-    public void recipeCheck(Recipe recept) {
-        if (checkIngredient(recept) == recept.getWeightedIngredient().size()) {
-            System.out.println(recept.getNameOfRecipe());
+    public boolean recipeCheck(Recipe recipe, ArrayList<WeightedIngredient> ingredientinFridge) {
+        for (WeightedIngredient checkRecipe : recipe.getWeightedIngredient()) {
+            for (WeightedIngredient checkFridge : ingredientinFridge) {
+                if (checkFridge.getNameOfIngredint().equalsIgnoreCase(checkRecipe.getNameOfIngredint()) && checkFridge.getWeight() > checkRecipe.getWeight()) {
+                    return true;
+                }
+            }
         }
+        return false;
     }
 
     public int checkIngredient(Recipe recipe) {
         int counter = 0;
         if (recipe != null) {
-            for (var ingredient : recipe.getWeightedIngredient()) {
-                for (var ingredient1 : this.ingredients)
+            for (WeightedIngredient ingredient : recipe.getWeightedIngredient()) {
+                for (WeightedIngredient ingredient1 : this.ingredients)
                     if (ingredient.getNameOfIngredint().equalsIgnoreCase(ingredient1.getNameOfIngredint()) && ingredient.getWeight() <= ingredient1.getWeight()) {
                         counter++;
                     }
@@ -68,12 +68,12 @@ public class Fridge {
         return counter;
     }
 
-    public void takeOutIngredients(List<WeightedIngredient> ingredientinFridge, double ingredientWeight, String nameOfIngredient) {
+    public void takeOutIngredients(ArrayList<WeightedIngredient> ingredientinFridge, double ingredientWeight, String nameOfIngredient) {
         for (WeightedIngredient ingredients : ingredientinFridge) {
             String ingredientInFridgeName = ingredients.getNameOfIngredint();
             double ingredientInFridgeWeight = ingredients.getWeight();
-            if (ingredientInFridgeName.equals(ingredients.getNameOfIngredint()) && ingredientInFridgeWeight > ingredientWeight) {
-                ingredients.removeWeight(ingredientInFridgeWeight, ingredientWeight);
+            if (ingredientInFridgeName.equals(nameOfIngredient) && ingredientInFridgeWeight > ingredientWeight) {
+                ingredients.removeWeight(ingredientWeight, ingredientInFridgeWeight);
             } else {
                 System.out.println("You don't have enough of: " + ingredients.getNameOfIngredint());
             }
@@ -81,20 +81,23 @@ public class Fridge {
     }
 
     public void takingIngredientsForRecipe(List<WeightedIngredient> ingredientsRecipe, List<WeightedIngredient> ingredientsFridge) {
-        for (WeightedIngredient ingredientsFridges : ingredientsFridge) {
-            String nameOfngredientFridge = ingredientsFridges.getNameOfIngredint();
-            double ingredientWeightFrigde = ingredientsFridges.getWeight();
+        for (WeightedIngredient ingredientsFridges1 : ingredientsFridge) {
+            String nameOfngredientFridge = ingredientsFridges1.getNameOfIngredint();
+            double ingredientWeightFrigde = ingredientsFridges1.getWeight();
 
             for (WeightedIngredient ingredientsRecipes : ingredientsRecipe) {
                 String nameOfngredientRecipe = ingredientsRecipes.getNameOfIngredint();
                 if (nameOfngredientRecipe.equals(nameOfngredientFridge)) {
                     double ingredientWeightRecipe = ingredientsRecipes.getWeight();
-                    nameOfngredientRecipe = ingredientsRecipes.getNameOfIngredint();
-                    if (nameOfngredientFridge.equals(nameOfngredientRecipe)) {
-                        ingredientsFridges.removeWeight(ingredientWeightFrigde, ingredientWeightRecipe);
+                    if (ingredientWeightRecipe <= ingredientWeightFrigde) {
+                        ingredientsFridges1.removeWeight(ingredientWeightRecipe, ingredientWeightFrigde);
                         System.out.println("Good Job, keep on making food!");
                     } else {
-                        System.out.println("Sorry you don't have enough ingredients :(");
+                        try{
+                            ingredientsFridge.remove(ingredientsFridges1);
+                        } catch (Exception exception){
+                            System.out.println("Sorry you don't have enough ingredients :(");
+                        }
                     }
                 }
             }

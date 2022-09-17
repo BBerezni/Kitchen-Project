@@ -43,8 +43,9 @@ public class Recipe implements Priceable {
 
     public void getScaledRecipe(double scale) {
         Recipe scaledRecipe = new Recipe(nameOfRecipe, weightedIngredient);
+        int i = 0;
         for (WeightedIngredient ingredient : this.weightedIngredient) {
-            scaledRecipe.weightedIngredient.add(new WeightedIngredient(1, ingredient.getNameOfIngredint(), (ingredient.getWeight()*scale)/100, ingredient.getPricePerUnit()));
+            scaledRecipe.weightedIngredient.add(new WeightedIngredient(i++, ingredient.getNameOfIngredint(), (ingredient.getWeight()*scale)/100, ingredient.getPricePerUnit()));
         }
     }
 

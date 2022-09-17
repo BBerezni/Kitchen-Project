@@ -39,10 +39,10 @@ WeightedIngredient extends Ingredient {
         setWeight(weight);
     }
 
-    public void addWeight(double addedWeight, double weight){
-        weight = getWeight();
-        weight = weight + addedWeight;
-        setWeight(weight);
+    public void addWeight(double addedWeight, double weight1){
+        weight1 = getWeight();
+        weight1 = weight1 + addedWeight;
+        setWeight(weight1);
     }
 
     public void removeWeight(double removedWeight, double weight){

@@ -9,14 +9,10 @@ public class Application {
         Scanner sc = new Scanner(System.in);
         ArrayList<WeightedIngredient> ingredientsFridge = new ArrayList<>();
         Fridge fridge = new Fridge();
-        Recipe recipe = new Recipe();
         DatabaseRecipes databaseRecipes = new DatabaseRecipes();
-        DatabaseIngredient databaseIngredient = new DatabaseIngredient();
-        List<Recipe> recipeList = databaseRecipes.getRecipe();
         List<Recipe> recipeListFavorites = new ArrayList<>();
 
         boolean run = true;
-
         kitchenLabel:
         while (run) {
             System.out.println("    Welcome to our kitchen!   ");
@@ -32,7 +28,7 @@ public class Application {
             System.out.println("8. To check recipes by your money and difficulty");
             System.out.println("9. To sort all recipes by difficulty");
             System.out.println("10. To sort all recipes by price");
-            System.out.println("11. Favourite recipes (work in progress)"); // work in progress
+            System.out.println("11. Favourite recipes");
             System.out.println("12. To check all ingredients in fridge");
             System.out.println("0. To exit kitchen");
             System.out.println("<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>");
@@ -78,16 +74,15 @@ public class Application {
                                 String ingredientName = sc.next().toLowerCase();
                                 System.out.print("Please enter ingredient weight: ");
                                 double ingredientWeight = sc.nextDouble();
-                                databaseIngredient.AllIngredients();
-                                if (fridge.ingredientCheck(ingredientName, ingredientsFridge)) {
-                                    fridge.takeOutIngredients(ingredientsFridge, ingredientWeight, ingredientName);
+                                if (fridge.ingredientCheck(ingredientName, fridge.getIngredients())) {
+                                    fridge.takeOutIngredients(fridge.getIngredients(), ingredientWeight, ingredientName);
                                 }
                                 break;
                             case 2:
                                 System.out.print("Please enter ingredient name: ");
                                 ingredientName = sc.next().toLowerCase();
-                                if (fridge.ingredientCheck(ingredientName, ingredientsFridge)) {
-                                    fridge.removeIngredients(ingredientsFridge, ingredientName);
+                                if (fridge.ingredientCheck(ingredientName, fridge.getIngredients())) {
+                                    fridge.removeIngredients(ingredientName);
                                 }
                                 break;
                         }
@@ -105,7 +100,9 @@ public class Application {
                 case 3:
                     System.out.println("From available ingredients you can make: ");
                     for (var recipe1 : databaseRecipes.getRecipe()) {
-                        fridge.recipeCheck(recipe1);
+                        if(fridge.recipeCheck(recipe1, fridge.getIngredients())){
+                            System.out.println(recipe1.getNameOfRecipe());
+                        }
                     }
                     break;
 
@@ -114,12 +111,13 @@ public class Application {
                     while (case4) {
                         System.out.println("Enter for how much you want to scale recipes: ");
                         double scale = sc.nextDouble();
-                        for (var recipe2 : databaseRecipes.getRecipe()) {
-                            recipe2.getScaledRecipe(scale);
-                        }
                         for (var recipe1 : databaseRecipes.getRecipe()) {
-                            fridge.recipeCheck(recipe1);
+                            recipe1.getScaledRecipe(scale);
+                            if(fridge.recipeCheck(recipe1, fridge.getIngredients())){
+                                System.out.println(recipe1.getNameOfRecipe());
+                            }
                         }
+                        System.out.println();
                         System.out.print("Do you want to try another scale? Y/N ");
                         String str = sc.next().toUpperCase();
                         switch (str) {
@@ -333,15 +331,82 @@ public class Application {
                     break;
 
                 case 11:
-                    System.out.println("Available recipes are: ");
-                    int x = 1;
-                    for (Recipe rec : databaseRecipes.getRecipe()) {
-                        System.out.println((x++) + ". " + rec.getNameOfRecipe());
+                    boolean case11 = true;
+                    case11:
+                    while (case11) {
+                        System.out.println("""
+                                Type 1. to see favourite recipes,\s
+                                Type 2. to add or remove favourite recipes,\s
+                                Type 3. to see scaled favoutire recipes.""");
+                        input = sc.nextInt();
+                        switch (input) {
+                            case 1:
+                                int x = 0;
+                                for (Recipe rec : recipeListFavorites) {
+                                    System.out.println((x++) + ". " + rec.getNameOfRecipe());
+                                }
+                                break;
+
+                            case 2:
+                                System.out.println("Type 1. to add favourite recipe, \nType 2. to remove favourite recipe.");
+                                input = sc.nextInt();
+                                switch (input) {
+                                    case 1:
+                                        System.out.println("Available recipes are: ");
+                                        x = 0;
+                                        for (Recipe rec : databaseRecipes.getRecipe()) {
+                                            System.out.println((x++) + ". " + rec.getNameOfRecipe());
+                                        }
+                                        System.out.println("Enter number of recipe you want to add to favorites: ");
+                                        input = sc.nextInt();
+                                        recipeListFavorites.add(databaseRecipes.getRecipe().get(input));
+                                        continue case11;
+
+                                    case 2:
+                                        System.out.println("Your favourite recipes are: ");
+                                        x = 0;
+                                        for (Recipe rec : recipeListFavorites) {
+                                            System.out.println((x++) + ". " + rec.getNameOfRecipe());
+                                        }
+                                        System.out.println("Enter number of recipe you want to remove from favorites: ");
+                                        input = sc.nextInt();
+                                        recipeListFavorites.remove(recipeListFavorites.get(input));
+                                        continue case11;
+                                }
+                            case 3:
+                                boolean case3 = true;
+                                while (case3) {
+                                    System.out.println("For how much money do you want to make favourite recipes?");
+                                    double money = sc.nextDouble();
+                                    for (Recipe recipe1 : recipeListFavorites) {
+                                        if (recipe1.getPrice() < money) {
+                                            System.out.println("You can make: " + recipe1.getNameOfRecipe());
+                                        }
+                                    }
+                                    System.out.print("Do you want to try with more money? Y/N ");
+                                    str = sc.next().toUpperCase();
+                                    switch (str) {
+                                        case "Y":
+                                            break;
+                                        case "N":
+                                            case3 = false;
+                                    }
+                                }
+
+                                System.out.print("Do you want to see favourite options again? Y/N ");
+                                str = sc.next().toUpperCase();
+                                switch (str) {
+                                    case "Y":
+                                        continue case11;
+                                    case "N":
+                                        case11 = false;
+                                }
+                        }
+                        continue kitchenLabel;
                     }
-                    break;
 
                 case 12:
-                    System.out.println(ingredientsFridge);
+                    System.out.println(fridge.getIngredients());
                     System.out.print("Do you want to go back to kitchen? Y/N ");
                     str = sc.next().toUpperCase();
                     switch (str) {
@@ -352,7 +417,14 @@ public class Application {
                             System.out.println("Thanks for using our app.");
                     }
                     break;
+                case 13:
+                    System.out.println(fridge.getIngredients());
+                    System.out.println();
+                    System.out.println(ingredientsFridge);
+
             }
         }
+
+
     }
 }
