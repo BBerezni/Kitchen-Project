@@ -100,7 +100,7 @@ public class Application {
                 case 3:
                     System.out.println("From available ingredients you can make: ");
                     for (var recipe1 : databaseRecipes.getRecipe()) {
-                        if(fridge.recipeCheck(recipe1, fridge.getIngredients())){
+                        if (fridge.recipeCheck(recipe1, fridge.getIngredients())) {
                             System.out.println(recipe1.getNameOfRecipe());
                         }
                     }
@@ -113,7 +113,7 @@ public class Application {
                         double scale = sc.nextDouble();
                         for (var recipe1 : databaseRecipes.getRecipe()) {
                             recipe1.getScaledRecipe(scale);
-                            if(fridge.recipeCheck(recipe1, fridge.getIngredients())){
+                            if (fridge.recipeCheck(recipe1, fridge.getIngredients())) {
                                 System.out.println(recipe1.getNameOfRecipe());
                             }
                         }
@@ -417,14 +417,7 @@ public class Application {
                             System.out.println("Thanks for using our app.");
                     }
                     break;
-                case 13:
-                    System.out.println(fridge.getIngredients());
-                    System.out.println();
-                    System.out.println(ingredientsFridge);
-
             }
         }
-
-
     }
 }
